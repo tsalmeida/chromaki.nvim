@@ -1,0 +1,56 @@
+local chromaki = require("chromaki")
+
+chromaki.apply({
+	name = "chromaki-sepia",
+	flavour = "latte",
+	background = "light",
+	palette = {
+		rosewater = "#d8b59b",
+		flamingo = "#c79282",
+		pink = "#b35b80",
+		mauve = "#8b5d8c",
+		red = "#9a2f1b",
+		maroon = "#6b2014",
+		peach = "#c2691b",
+		yellow = "#b08926",
+		green = "#4c6b3c",
+		teal = "#3f6f63",
+		sky = "#4b7b88",
+		sapphire = "#2f5876",
+		blue = "#294a78",
+		lavender = "#555c99",
+		text = "#000000",
+		subtext1 = "#1f1606",
+		subtext0 = "#342412",
+		overlay2 = "#5c4320",
+		overlay1 = "#72532a",
+		overlay0 = "#876336",
+		surface2 = "#9a7443",
+		surface1 = "#ad8551",
+		surface0 = "#e8cc81",
+		base = "#f4e7c3",
+		mantle = "#ecd9aa",
+		crust = "#e3cfa0",
+	},
+	custom_highlights = function(colors)
+		-- REMOVED: vim.g.inactive_win_bg_force = "#ffffff"
+		-- We now let personal.lua derive the inactive color automatically.
+		return {
+			Normal = { fg = colors.text, bg = colors.base },
+			NormalNC = { fg = colors.text, bg = colors.base },
+			Comment = { fg = colors.overlay1, italic = true },
+			LineNr = { fg = colors.surface0 },
+			CursorLine = { bg = colors.surface0 },
+			CursorLineNr = { fg = colors.text, bg = colors.surface0, bold = true },
+			StatusLine = { fg = colors.text, bg = colors.surface0 },
+			StatusLineNC = { fg = colors.overlay0, bg = colors.surface0 },
+			VertSplit = { fg = colors.text, bg = colors.text },
+			WinSeparator = { fg = colors.text, bg = colors.text },
+			DiagnosticWarn = { fg = colors.peach },
+			DiagnosticError = { fg = colors.red },
+			DiagnosticInfo = { fg = colors.blue },
+			DiagnosticHint = { fg = colors.teal },
+			WarningMsg = { fg = colors.base, bg = colors.green, bold = true },
+		}
+	end,
+})
