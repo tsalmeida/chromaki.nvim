@@ -1,5 +1,12 @@
 local M = {}
 
+local function reset_catppuccin_compiler()
+        -- Catppuccin's compiler module captures its options table at require
+        -- time. Chromaki changes compile_path per colorscheme, so reload the
+        -- compiler before setup to keep cache writes aligned with cache loads.
+        package.loaded["catppuccin.lib.compiler"] = nil
+end
+
 local function default_integrations()
         return {
                 cmp = true,
@@ -132,6 +139,7 @@ function M.apply(spec)
                 end,
         }, spec.setup or {})
 
+        reset_catppuccin_compiler()
         cp.setup(setup_opts)
         if cp.load then
                 cp.load(spec.flavour)
