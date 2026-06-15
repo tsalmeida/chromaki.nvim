@@ -7,6 +7,12 @@ local function reset_catppuccin_compiler()
         package.loaded["catppuccin.lib.compiler"] = nil
 end
 
+local function clear_terminal_palette()
+        for index = 0, 15 do
+                vim.g["terminal_color_" .. index] = nil
+        end
+end
+
 local function default_integrations()
         return {
                 cmp = true,
@@ -98,7 +104,7 @@ function M.apply(spec)
         local setup_opts = vim.tbl_deep_extend("force", {
                 flavour = spec.flavour,
                 transparent_background = transparent,
-                term_colors = true,
+                term_colors = false,
                 background = { light = "latte", dark = "mocha" },
                 compile = { enabled = true, path = compile_path },
                 compile_path = compile_path,
@@ -149,6 +155,10 @@ function M.apply(spec)
 
         vim.opt.background = spec.background or (spec.flavour == "latte" and "light" or "dark")
         vim.g.colors_name = spec.name
+
+        if setup_opts.term_colors == false then
+                clear_terminal_palette()
+        end
 end
 
 return M
