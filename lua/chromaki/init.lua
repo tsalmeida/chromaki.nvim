@@ -157,7 +157,23 @@ function M.apply(spec)
         vim.g.colors_name = spec.name
 
         if setup_opts.term_colors == false then
-                clear_terminal_palette()
+                if transparent then
+                        -- Transparent schemes show the terminal's own background image through
+                        -- bg = "NONE" cells.  Clearing the palette leaves Neovim's built-in
+                        -- #000000 as terminal_color_0, so :terminal apps that paint their
+                        -- background with ANSI colour-0 get solid black -- hiding the dark
+                        -- (#1a1a1a) foreground text against it.  Pin colours 0/7/15 to the
+                        -- scheme's ink-on-parchment anchors instead; leave accent colours
+                        -- (1-6, 8-14) as Neovim's built-in standard ANSI values.
+                        local p = colour_overrides[spec.flavour] or {}
+                        vim.g.terminal_color_0  = p.base  or nil
+                        vim.g.terminal_color_7  = p.text  or nil
+                        vim.g.terminal_color_15 = p.text  or nil
+                        for i = 1, 6  do vim.g["terminal_color_" .. i] = nil end
+                        for i = 8, 14 do vim.g["terminal_color_" .. i] = nil end
+                else
+                        clear_terminal_palette()
+                end
         end
 end
 

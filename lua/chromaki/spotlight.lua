@@ -109,7 +109,7 @@ local function build_flat()
 			local src = resolve(all, name, 0) or {}
 			vim.api.nvim_set_hl(NS_FLAT, name, {
 				fg = pick_fg(name),
-				bg = "NONE",
+				bg = dark.bg,
 				sp = dark.dim,
 				bold = src.bold or nil,
 				italic = src.italic or nil,
@@ -189,7 +189,7 @@ function M.enable(opts)
 
 	local group = vim.api.nvim_create_augroup(AUGROUP, { clear = true })
 
-	vim.api.nvim_create_autocmd({ "WinEnter", "WinNew", "TabEnter", "VimEnter" }, {
+	vim.api.nvim_create_autocmd({ "WinEnter", "WinNew", "BufEnter", "TabEnter", "VimEnter" }, {
 		group = group,
 		callback = update,
 	})
