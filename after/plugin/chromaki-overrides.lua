@@ -2,7 +2,7 @@
 -- Extra polish for chromaki-sepia-blue
 
 local function align_inactive_gutter()
-	-- Grab NormalNC background (Focus mode logic sets this already)
+	-- Grab NormalNC background (chromaki's apply() sets the inactive tint)
 	local ok, normal_nc = pcall(vim.api.nvim_get_hl, 0, { name = "NormalNC", link = false })
 	if not ok or not normal_nc or not normal_nc.bg then
 		return

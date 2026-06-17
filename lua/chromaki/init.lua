@@ -13,6 +13,10 @@ local function clear_terminal_palette()
         end
 end
 
+local function as_hex(s)
+        return (type(s) == "string" and s:match("^#%x%x%x%x%x%x$")) and s or nil
+end
+
 local function default_integrations()
         return {
                 cmp = true,
@@ -83,6 +87,7 @@ end
 ---@field palette table<string, string>
 ---@field background? "dark"|"light"
 ---@field transparent? boolean : drop the editor background so the terminal's own background (e.g. the paper texture image) shows through
+---@field inactive_win_bg? string : hex tint for inactive windows (NormalNC); falls back to vim.g.inactive_win_bg_hint
 ---@field custom_highlights? table<string, table>|fun(colors: table):table
 ---@field setup? table : extra catppuccin.setup options
 
@@ -134,8 +139,8 @@ function M.apply(spec)
                         if transparent then
                                 -- Presets set Normal/NormalNC bg explicitly, which would
                                 -- defeat transparent_background; strip them back out.
-                                -- FocusMode (lua/focus.lua) still re-tints NormalNC at
-                                -- runtime when it is enabled.
+                                -- (The inactive-window tint below is skipped for
+                                -- transparent schemes, so NormalNC stays see-through.)
                                 highlights.Normal =
                                         vim.tbl_extend("force", highlights.Normal or {}, { bg = "NONE" })
                                 highlights.NormalNC =
@@ -155,6 +160,16 @@ function M.apply(spec)
 
         vim.opt.background = spec.background or (spec.flavour == "latte" and "light" or "dark")
         vim.g.colors_name = spec.name
+
+        -- Coloured inactive windows, self-contained. Each preset publishes its
+        -- tint via spec.inactive_win_bg (or the vim.g.inactive_win_bg_hint global,
+        -- which logarktos's focus dimming also reads). Apply it to NormalNC here
+        -- so the effect works with chromaki alone, no external consumer required.
+        -- Transparent schemes intentionally keep NormalNC see-through.
+        local inactive_bg = as_hex(spec.inactive_win_bg) or as_hex(vim.g.inactive_win_bg_hint)
+        if inactive_bg and not transparent then
+                vim.api.nvim_set_hl(0, "NormalNC", { bg = inactive_bg, fg = "NONE" })
+        end
 
         if setup_opts.term_colors == false then
                 if transparent then
