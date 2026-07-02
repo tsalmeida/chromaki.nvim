@@ -3,7 +3,10 @@
 -- transparent background (the terminal's background image shows through),
 -- while every INACTIVE window goes flat dark mode -- plain light-grey text on
 -- solid black, no syntax colors. Moving focus feels like a spotlight: one
--- window goes dark while another is revealed.
+-- window goes dark while another is revealed. Terminal windows opt out of the
+-- spotlight entirely: they are always Matrix phosphor-green on black, focused
+-- or not (see spotlight.lua for why terminals can't follow the light/dark
+-- split), so the three worlds stay distinct at a glance.
 --
 -- Active-window palette/highlights follow chromaki-sepia-light-transparent
 -- (a light palette is required for the active window to stay readable over
@@ -142,8 +145,10 @@ chromaki.apply({
 	end,
 })
 
--- Spotlight: flatten all inactive windows to grey-on-black dark mode.
+-- Spotlight: flatten all inactive windows to grey-on-black dark mode;
+-- terminals are permanently Matrix green-on-black, focused or not.
 require("chromaki.spotlight").enable({
 	scheme = "chromaki-light-transparent-spotlight",
 	inactive = "flat",
+	terminal = "matrix",
 })

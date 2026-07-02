@@ -5,7 +5,8 @@
 --   BOLD    - major headings and strong emphasis.
 --   ITALIC  - minor headings, emphasis, quotes.
 --   REGULAR - body text and everything owned by other plugins/apps.
--- Inactive windows flatten to grey-on-black via spotlight.
+-- Inactive windows flatten to grey-on-black via spotlight. Terminal windows
+-- are always Matrix phosphor-green on black, focused or not.
 
 local chromaki = require("chromaki")
 
@@ -139,8 +140,10 @@ chromaki.apply({
 	end,
 })
 
--- Spotlight: flatten all inactive windows to grey-on-black dark mode.
+-- Spotlight: flatten all inactive windows to grey-on-black dark mode;
+-- terminals are permanently Matrix green-on-black, focused or not.
 require("chromaki.spotlight").enable({
 	scheme = "chromaki-transparent-light-bones-spotlight",
 	inactive = "flat",
+	terminal = "matrix",
 })
